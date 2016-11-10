@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, document */
 
 const EMPTY_BOARD = [
   [0, 0, 0, 0],
@@ -15,6 +15,38 @@ class GameState {
 
   static getScore() {
     return this.parseGameScoreString($('.score-container').innerHTML);
+  }
+
+  static isGameOver() {
+    return $('.game-over');
+  }
+
+  static startNewGame() {
+    this.dispatchKeypress(32);
+  }
+
+  static moveLeft() {
+    this.dispatchKeypress(37);
+  }
+
+  static moveRight() {
+    this.dispatchKeypress(39);
+  }
+
+  static moveDown() {
+    this.dispatchKeypress(40);
+  }
+
+  static moveUp() {
+    this.dispatchKeypress(38);
+  }
+
+  static dispatchKeypress(key) {
+    const el = $('.grid-container');
+    const eventObj = document.createEvent('Events');
+    eventObj.initEvent('keydown', true, true);
+    eventObj.which = key;
+    el.dispatchEvent(eventObj);
   }
 
   static parseBoard(boardChildren) {
