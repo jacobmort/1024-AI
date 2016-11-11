@@ -1,20 +1,57 @@
-/* global $, document */
+/* global document */
+/* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }]*/
+/* spooky can't handle fat arrows */
 
-const EMPTY_BOARD = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
+const Spooky = require('spooky');
+const GameState = require('./GameState');
 
-class GameState {
+class Driver {
+  constructor() {
+    this.spooky = new Spooky({
+      child: {
+        command: './node_modules/casperjs/bin/casperjs', // add this line
+        transport: 'http',
+      },
+      casper: {
+        logLevel: 'debug',
+        verbose: true,
+      },
+    }, this.run.bind(this));
 
-  static getBoard() {
-    return this.parseBoard($('.tile-container').children);
+    this.spooky.on('console', (line) => {
+      console.log(line);
+    });
+
+    this.spooky.on('error', (e, stack) => {
+      console.error(e);
+      if (stack) {
+        console.log(stack);
+      }
+    });
+
+    this.spooky.on('board', (board) => {
+      console.log('start parse');
+      console.log(GameState.parseBoard(board));
+      console.log('endparse');
+    });
+  }
+
+  run(err) {
+    if (err) {
+      throw err;
+    } else {
+      this.spooky.start('http://1024game.org/');
+      this.spooky.then(function spookyEval() {
+        this.emit('board', this.evaluate(function getBoardCells() {
+          return document.querySelectorAll('.tile-container')[0].children;
+        }));
+      });
+      this.spooky.run();
+    }
   }
 
   static getScore() {
-    return this.parseGameScoreString($('.score-container').innerHTML);
+    return this.gameState.parseGameScoreString($('.score-container').innerHTML);
   }
 
   static isGameOver() {
@@ -49,37 +86,6 @@ class GameState {
     el.dispatchEvent(eventObj);
   }
 
-  static parseBoard(boardChildren) {
-    const board = [].concat(EMPTY_BOARD);
-    boardChildren.forEach((tile) => {
-      const className = this.getClassName(tile);
-      const score = this.parseTileScore(className);
-      const { x, y } = this.parseTilePosition(className);
-      board[x][y] = score;
-    });
-    return board;
-  }
-
-  static parseGameScoreString(score) {
-    return parseInt(score.split('<div')[0], 10);
-  }
-
-  static parseTilePosition(tile) {
-    const matches = /tile-position-(\d*)-(\d*)/.exec(tile);
-    return {
-      x: parseInt(matches[1] - 1, 10),
-      y: parseInt(matches[2] - 1, 10),
-    };
-  }
-
-  static parseTileScore(tile) {
-    return parseInt(/tile-(\d*)/.exec(tile)[1], 10);
-  }
-
-  static getClassName(domOrCheerioEle) {
-    return 'className' in domOrCheerioEle ?
-      domOrCheerioEle.className : domOrCheerioEle.attribs.class;
-  }
 }
 
-export default GameState;
+const driver = new Driver();
