@@ -7,6 +7,7 @@ const GameState = require('./GameState');
 
 class Driver {
   constructor() {
+    this.gameState = new GameState();
     this.spooky = new Spooky({
       child: {
         command: './node_modules/casperjs/bin/casperjs', // add this line
@@ -29,10 +30,23 @@ class Driver {
       }
     });
 
-    this.spooky.on('board', (board) => {
-      console.log('start parse');
-      console.log(GameState.parseBoard(board));
-      console.log('endparse');
+    this.spooky.on('board', (boardHtml) => {
+      try {
+        this.gameState.setBoard(GameState.parseBoard(boardHtml));
+        console.log(this.gameState.board);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    this.spooky.on('score', (scoreHtml) => {
+      console.log(`raw gamescore: ${scoreHtml}`);
+      try {
+        this.gameState.setScore(GameState.parseGameScoreString(scoreHtml));
+      } catch (e) {
+        console.log(e);
+      }
+      console.log(`gamescore: ${this.gameState.score}`);
     });
   }
 
@@ -40,52 +54,80 @@ class Driver {
     if (err) {
       throw err;
     } else {
+      this.gameState.startGame();
       this.spooky.start('http://1024game.org/');
-      this.spooky.then(function spookyEval() {
-        this.emit('board', this.evaluate(function getBoardCells() {
-          return document.querySelectorAll('.tile-container')[0].children;
-        }));
-      });
+      this.getBoard();
+      this.makeMove();
+      this.getScore();
+      this.getBoard();
       this.spooky.run();
     }
   }
 
-  static getScore() {
-    return this.gameState.parseGameScoreString($('.score-container').innerHTML);
+  getBoard() {
+    this.spooky.then(function spookyEval() {
+      this.emit('board', this.evaluate(function getBoardCells() {
+        return document.querySelectorAll('.tile-container')[0].children;
+      }));
+    });
   }
 
-  static isGameOver() {
+  makeMove() {
+    this.moveDown();
+  }
+
+  getScore() {
+    this.spooky.then(function spookyEval() {
+      this.emit('score', this.evaluate(function getBoardCells() {
+        return document.querySelectorAll('.score-container')[0].innerHTML;
+      }));
+    });
+  }
+
+  isGameOver() {
     return $('.game-over');
   }
 
-  static startNewGame() {
+  startNewGame() {
     this.dispatchKeypress(32);
   }
 
-  static moveLeft() {
+  moveLeft() {
     this.dispatchKeypress(37);
   }
 
-  static moveRight() {
+  moveRight() {
     this.dispatchKeypress(39);
   }
 
-  static moveDown() {
+  moveDown() {
     this.dispatchKeypress(40);
   }
 
-  static moveUp() {
+  moveUp() {
     this.dispatchKeypress(38);
   }
 
-  static dispatchKeypress(key) {
-    const el = $('.grid-container');
-    const eventObj = document.createEvent('Events');
-    eventObj.initEvent('keydown', true, true);
-    eventObj.which = key;
-    el.dispatchEvent(eventObj);
-  }
+  dispatchKeypress(key) {
+    this.spooky.then(function spookyEval() {
+      //this.sendKeys('.grid-container', spookyKey);
+      // console.log('there');
+      // this.evaluate(function sendKey() {
+      try {
 
+        // this.page.sendEvent('keypress', 40);
+        const el = document.querySelectorAll('.grid-container')[0];
+        this.emit('console', el);
+        const eventObj = document.createEvent('Events');
+        eventObj.initEvent('keydown', true, true);
+        eventObj.which = 40;
+        el.dispatchEvent(eventObj);
+      } catch (e) {
+        this.emit('console', e);
+      }
+      // });
+    });
+  }
 }
 
 const driver = new Driver();

@@ -6,24 +6,41 @@ const EMPTY_BOARD = [
 ];
 
 class GameState {
+  constructor() {
+    this.gameRunning = false;
+    this.totalScore = 0;
+    this.board = null;
+  }
+
+  startGame() {
+    this.gameRunning = true;
+  }
+
+  endGame() {
+    this.gameRunning = false;
+  }
+
+  setBoard(board) {
+    this.board = board;
+  }
+
+  setScore(score) {
+    this.score = score;
+  }
+
   static parseBoard(boardChildren) {
-    let board = [].concat(EMPTY_BOARD);
-    try {
-      Array.from(boardChildren).forEach((tile) => {
-        if (tile) {
-          const className = this.getClassName(tile);
-          console.log(className);
-          const score = this.parseTileScore(className);
-          console.log(score);
-          const { x, y } = this.parseTilePosition(className);
-          console.log(`x:${x} y:${y}`);
-          board[x][y] = score;
-        }
-      });
-    } catch (e) {
-      console.log(e);
-      board = null;
-    }
+    const board = [].concat(EMPTY_BOARD);
+    Array.from(boardChildren).forEach((tile) => {
+      if (tile) {
+        const className = this.getClassName(tile);
+        console.log(className);
+        const score = this.parseTileScore(className);
+        console.log(`tile score:${score}`);
+        const { x, y } = this.parseTilePosition(className);
+        console.log(`tile x:${x} y:${y}`);
+        board[x][y] = score;
+      }
+    });
     return board;
   }
 
