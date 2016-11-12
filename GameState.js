@@ -28,20 +28,23 @@ class GameState {
     this.score = score;
   }
 
-  static parseBoard(boardChildren) {
+  static parseBoard(tileClasses) {
     const board = [].concat(EMPTY_BOARD);
-    Array.from(boardChildren).forEach((tile) => {
-      if (tile) {
-        const className = this.getClassName(tile);
-        console.log(className);
-        const score = this.parseTileScore(className);
-        console.log(`tile score:${score}`);
-        const { x, y } = this.parseTilePosition(className);
-        console.log(`tile x:${x} y:${y}`);
-        board[x][y] = score;
-      }
+    tileClasses.forEach((tileClass) => {
+      console.log(tileClass);
+      const score = this.parseTileScore(tileClass);
+      // console.log(`tile score:${score}`);
+      const { x, y } = this.parseTilePosition(tileClass);
+      console.log(`tile x:${x} y:${y}`);
+      board[y][x] = score;
     });
     return board;
+  }
+
+  logBoard() {
+    this.board.forEach((row) => {
+      console.log(row.reduce((accum, cell) => `${accum} ${cell}`));
+    });
   }
 
   static parseGameScoreString(score) {
@@ -58,11 +61,6 @@ class GameState {
 
   static parseTileScore(tile) {
     return parseInt(/tile-(\d*)/.exec(tile)[1], 10);
-  }
-
-  static getClassName(domOrCheerioEle) {
-    return 'className' in domOrCheerioEle ?
-      domOrCheerioEle.className : domOrCheerioEle.attribs.class;
   }
 }
 

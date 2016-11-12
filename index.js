@@ -2,66 +2,43 @@
 /* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }]*/
 /* spooky can't handle fat arrows */
 
-const Spooky = require('spooky');
+const Nightmare = require('nightmare');
 const GameState = require('./GameState');
 
 class Driver {
   constructor() {
     this.gameState = new GameState();
-    this.spooky = new Spooky({
-      child: {
-        command: './node_modules/casperjs/bin/casperjs', // add this line
-        transport: 'http',
-      },
-      casper: {
-        logLevel: 'debug',
-        verbose: true,
-      },
-    }, this.run.bind(this));
-
-    this.spooky.on('console', (line) => {
-      console.log(line);
-    });
-
-    this.spooky.on('error', (e, stack) => {
-      console.error(e);
-      if (stack) {
-        console.log(stack);
-      }
-    });
-
-    this.spooky.on('board', (boardHtml) => {
-      try {
-        this.gameState.setBoard(GameState.parseBoard(boardHtml));
-        console.log(this.gameState.board);
-      } catch (e) {
-        console.log(e);
-      }
-    });
-
-    this.spooky.on('score', (scoreHtml) => {
-      console.log(`raw gamescore: ${scoreHtml}`);
-      try {
-        this.gameState.setScore(GameState.parseGameScoreString(scoreHtml));
-      } catch (e) {
-        console.log(e);
-      }
-      console.log(`gamescore: ${this.gameState.score}`);
+    this.nightmare = Nightmare({
+      show: true,
+      openDevTools: true,
     });
   }
 
-  run(err) {
-    if (err) {
-      throw err;
-    } else {
-      this.gameState.startGame();
-      this.spooky.start('http://1024game.org/');
-      this.getBoard();
-      this.makeMove();
-      this.getScore();
-      this.getBoard();
-      this.spooky.run();
-    }
+  run() {
+    this.nightmare
+      .goto('http://1024game.org/')
+      .wait('.tile')
+      .evaluate(() => {
+        const tiles = Array.from(document.querySelectorAll('.tile-container')[0].children);
+        return tiles.map(tile => tile.className)
+      })
+      .then((tileClasses) => {
+        this.gameState.setBoard(GameState.parseBoard(tileClasses));
+        this.gameState.logBoard();
+        this.nightmare.end();
+      })
+      .catch((error) => {
+        console.error(`error: ${error}`);
+      });
+
+
+      // this.gameState.startGame();
+      // this.spooky.start('http://1024game.org/');
+      // this.getBoard();
+      // this.makeMove();
+      // this.getScore();
+      // this.getBoard();
+      // this.spooky.run();
   }
 
   getBoard() {
@@ -131,3 +108,4 @@ class Driver {
 }
 
 const driver = new Driver();
+driver.run();
