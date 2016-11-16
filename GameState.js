@@ -28,8 +28,12 @@ class GameState {
     this.totalScore = score;
   }
 
+  static getEmptyBoard() {
+    return EMPTY_BOARD.map(arr => arr.slice());
+  }
+
   static parseBoard(tileClasses) {
-    const board = [].concat(EMPTY_BOARD);
+    const board = GameState.getEmptyBoard();
     tileClasses.forEach((tileClass) => {
       // console.log(tileClass);
       const score = this.parseTileScore(tileClass);

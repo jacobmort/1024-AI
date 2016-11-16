@@ -60,4 +60,13 @@ describe('GameState', () => {
       expect(board[3][3]).toEqual(32);
     });
   });
+
+  describe('getEmptyBoard', () => {
+    it('returns a new instance', () => {
+      const boardOne = GameState.getEmptyBoard();
+      boardOne[0][0] = 1;
+      const boardTwo = GameState.getEmptyBoard();
+      expect(boardTwo[0][0]).toEqual(0);
+    });
+  });
 });
