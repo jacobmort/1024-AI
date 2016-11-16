@@ -19,7 +19,6 @@ Nightmare.action('updateScore', function nightmareUpdateScore(gameState, done) {
   this.evaluate(() => document.querySelectorAll('.score-container')[0].innerHTML
   , gameState, done)
   .then((scoreHtml) => {
-    console.log(`scoreHtml:${scoreHtml}`);
     gameState.setScore(GameState.parseGameScoreString(scoreHtml));
     console.log(`score:${gameState.totalScore}`);
     done();

@@ -25,7 +25,7 @@ class GameState {
   }
 
   setScore(score) {
-    this.score = score;
+    this.totalScore = score;
   }
 
   static parseBoard(tileClasses) {
