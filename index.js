@@ -2,7 +2,6 @@
 /* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }]*/
 /* spooky can't handle fat arrows */
 
-//const Nightmare = require('nightmare');
 const Nightmare = require('./Nightmare1024');
 const GameState = require('./GameState');
 
@@ -19,11 +18,9 @@ class Driver {
     this.nightmare
       .goto('http://1024game.org/')
       .wait('.tile')
-      .updateBoard(this.gameState)
-      .updateScore(this.gameState)
-      .moveDown()
-      .updateBoard(this.gameState)
-      .updateScore(this.gameState)
+      .updateGameState(this.gameState)
+      .moveRight()
+      .updateGameState(this.gameState)
       .then((args) => {
         console.log(`done args:${args}`);
       })

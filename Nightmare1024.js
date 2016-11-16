@@ -3,6 +3,12 @@
 const Nightmare = require('nightmare');
 const GameState = require('./GameState');
 
+Nightmare.action('updateGameState', function nightmareUpdateGameState(gameState, done) {
+  this.updateBoard(gameState)
+  .then(() => this.updateScore(gameState))
+  .then(() => done());
+});
+
 Nightmare.action('updateBoard', function nightmareUpdateBoard(gameState, done) {
   this.evaluate(() => {
     const tiles = Array.from(document.querySelectorAll('.tile-container')[0].children);
