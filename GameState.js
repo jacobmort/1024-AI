@@ -31,11 +31,11 @@ class GameState {
   static parseBoard(tileClasses) {
     const board = [].concat(EMPTY_BOARD);
     tileClasses.forEach((tileClass) => {
-      console.log(tileClass);
+      // console.log(tileClass);
       const score = this.parseTileScore(tileClass);
       // console.log(`tile score:${score}`);
       const { x, y } = this.parseTilePosition(tileClass);
-      console.log(`tile x:${x} y:${y}`);
+      // console.log(`tile x:${x} y:${y}`);
       board[y][x] = score;
     });
     return board;

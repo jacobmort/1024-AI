@@ -2,7 +2,8 @@
 /* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }]*/
 /* spooky can't handle fat arrows */
 
-const Nightmare = require('nightmare');
+//const Nightmare = require('nightmare');
+const Nightmare = require('./Nightmare1024');
 const GameState = require('./GameState');
 
 class Driver {
@@ -18,93 +19,34 @@ class Driver {
     this.nightmare
       .goto('http://1024game.org/')
       .wait('.tile')
-      .evaluate(() => {
-        const tiles = Array.from(document.querySelectorAll('.tile-container')[0].children);
-        return tiles.map(tile => tile.className)
+      .updateBoard(this.gameState)
+      .updateScore(this.gameState)
+      .then((args) => {
+        console.log(`done args:${args}`);
       })
-      .then((tileClasses) => {
-        this.gameState.setBoard(GameState.parseBoard(tileClasses));
-        this.gameState.logBoard();
-        this.nightmare.end();
-      })
+      // .evaluate((getBoard) => {
+      //   // const tiles = Array.from(document.querySelectorAll('.tile-container')[0].children);
+      //   // return tiles.map(tile => tile.className);
+      //   return getBoard(document);
+      // }, this.getBoard)
+      // .then(tileClasses => this.updateBoard(tileClasses))
+      // .then(() => this.nightmare.type('.tile-container', 'a'))
+      // .then(() => this.nightmare.evaluate(this.getBoard))
       .catch((error) => {
         console.error(`error: ${error}`);
       });
-
-
-      // this.gameState.startGame();
-      // this.spooky.start('http://1024game.org/');
-      // this.getBoard();
-      // this.makeMove();
-      // this.getScore();
-      // this.getBoard();
-      // this.spooky.run();
   }
 
-  getBoard() {
-    this.spooky.then(function spookyEval() {
-      this.emit('board', this.evaluate(function getBoardCells() {
-        return document.querySelectorAll('.tile-container')[0].children;
-      }));
-    });
-  }
+  // getBoard(document) {
+  //   const tiles = Array.from(document.querySelectorAll('.tile-container')[0].children);
+  //   return tiles.map(tile => tile.className);
+  // }
 
-  makeMove() {
-    this.moveDown();
-  }
-
-  getScore() {
-    this.spooky.then(function spookyEval() {
-      this.emit('score', this.evaluate(function getBoardCells() {
-        return document.querySelectorAll('.score-container')[0].innerHTML;
-      }));
-    });
-  }
-
-  isGameOver() {
-    return $('.game-over');
-  }
-
-  startNewGame() {
-    this.dispatchKeypress(32);
-  }
-
-  moveLeft() {
-    this.dispatchKeypress(37);
-  }
-
-  moveRight() {
-    this.dispatchKeypress(39);
-  }
-
-  moveDown() {
-    this.dispatchKeypress(40);
-  }
-
-  moveUp() {
-    this.dispatchKeypress(38);
-  }
-
-  dispatchKeypress(key) {
-    this.spooky.then(function spookyEval() {
-      //this.sendKeys('.grid-container', spookyKey);
-      // console.log('there');
-      // this.evaluate(function sendKey() {
-      try {
-
-        // this.page.sendEvent('keypress', 40);
-        const el = document.querySelectorAll('.grid-container')[0];
-        this.emit('console', el);
-        const eventObj = document.createEvent('Events');
-        eventObj.initEvent('keydown', true, true);
-        eventObj.which = 40;
-        el.dispatchEvent(eventObj);
-      } catch (e) {
-        this.emit('console', e);
-      }
-      // });
-    });
-  }
+  // updateBoard(tileClasses) {
+  //   this.gameState.setBoard(GameState.parseBoard(tileClasses));
+  //   this.gameState.logBoard();
+  //   return Promise.resolve();
+  // }
 }
 
 const driver = new Driver();
