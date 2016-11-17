@@ -35,15 +35,13 @@ class Driver {
 
   recurseMove() {
     this.makeMove()
-      .then(() => {
-        this.nightmare.isDone()
-          .then((done) => {
-            if (!done) {
-              this.recurseMove();
-            } else {
-              this.nightmare.end();
-            }
-          });
+      .then(() => this.nightmare.isDone())
+      .then((done) => {
+        if (!done) {
+          this.recurseMove();
+        } else {
+          this.nightmare.end();
+        }
       });
   }
 
