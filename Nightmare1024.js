@@ -16,7 +16,7 @@ Nightmare.action('updateBoard', function nightmareUpdateBoard(gameState, done) {
   }, gameState, done)
   .then((tileClasses) => {
     gameState.setBoard(GameState.parseBoard(tileClasses));
-    gameState.logBoard();
+    // gameState.logBoard();
     done();
   });
 });
@@ -29,6 +29,12 @@ Nightmare.action('updateScore', function nightmareUpdateScore(gameState, done) {
     console.log(`score:${gameState.totalScore}`);
     done();
   });
+});
+
+Nightmare.action('isDone', function nightmareCheckDown(done) {
+  this.evaluate_now(() => {
+    return document.querySelectorAll('.game-over').length > 0
+  }, done);
 });
 
 Nightmare.action('moveLeft', function nightmareMoveLeft(done) {
