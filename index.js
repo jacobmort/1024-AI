@@ -28,13 +28,12 @@ class Driver {
 
   run() {
     this.visitPage()
-      .then(() => {
-        this.recurseMove();
-      });
+      .then(() => this.recurseMove());
   }
 
   recurseMove() {
     this.makeMove()
+      .then(() => this.nightmare.updateGameState(this.gameState))
       .then(() => this.nightmare.isDone())
       .then((done) => {
         if (!done) {
