@@ -26,7 +26,6 @@ Nightmare.action('updateScore', function nightmareUpdateScore(gameState, done) {
   , gameState, done)
   .then((scoreHtml) => {
     gameState.setScore(GameState.parseGameScoreString(scoreHtml));
-    console.log(`score:${gameState.totalScore}`);
     done();
   });
 });

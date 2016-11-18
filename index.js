@@ -4,6 +4,7 @@
 
 const Nightmare = require('./Nightmare1024');
 const GameState = require('./GameState');
+const RandomStrategy = require('./RandomStrategy');
 
 class Driver {
   constructor() {
@@ -12,12 +13,7 @@ class Driver {
       show: true,
       openDevTools: true,
     });
-    this.moves = [
-      'Up',
-      'Down',
-      'Right',
-      'Left',
-    ];
+    this.strategy = RandomStrategy;
   }
 
   visitPage() {
@@ -26,9 +22,11 @@ class Driver {
       .wait('.tile');
   }
 
-  run() {
-    this.visitPage()
-      .then(() => this.recurseMove());
+  * runGeneration(i) {
+    yield this.visitPage()
+      .then(() => {
+        this.recurseMove();
+      });
   }
 
   recurseMove() {
@@ -39,14 +37,13 @@ class Driver {
         if (!done) {
           this.recurseMove();
         } else {
-          this.nightmare.end();
+          this.nightmare.halt();
         }
       });
   }
 
   makeMove() {
-    const action = this.pickMove();
-    console.log(`next action:${action}`);
+    const action = this.strategy.pickMove();
     switch (action) {
       case 'Up':
         return this.nightmare.moveUp();
@@ -65,4 +62,4 @@ class Driver {
 }
 
 const driver = new Driver();
-driver.run();
+driver.runGeneration(0).next();
