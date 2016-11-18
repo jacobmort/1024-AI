@@ -22,28 +22,25 @@ class Driver {
       .wait('.tile');
   }
 
-  * runGeneration(i) {
-    yield this.visitPage()
-      .then(() => {
-        this.recurseMove();
-      });
+  runGeneration() {
+    return this.visitPage()
+      .then(() => this.recurseMove());
   }
 
   recurseMove() {
-    this.makeMove()
+    return this.makeMove()
       .then(() => this.nightmare.updateGameState(this.gameState))
       .then(() => this.nightmare.isDone())
       .then((done) => {
         if (!done) {
-          this.recurseMove();
-        } else {
-          this.nightmare.halt();
+          return this.recurseMove();
         }
+        return this.nightmare.halt();
       });
   }
 
   makeMove() {
-    const action = this.strategy.pickMove();
+    const action = this.strategy.pickMove(this.gameState);
     switch (action) {
       case 'Up':
         return this.nightmare.moveUp();
@@ -62,4 +59,7 @@ class Driver {
 }
 
 const driver = new Driver();
-driver.runGeneration(0).next();
+driver.runGeneration()
+  .then(() => {
+    console.log(driver.gameState.totalScore);
+  });
