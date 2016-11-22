@@ -31,9 +31,7 @@ Nightmare.action('updateScore', function nightmareUpdateScore(gameState, done) {
 });
 
 Nightmare.action('isDone', function nightmareCheckDown(done) {
-  this.evaluate_now(() => {
-    return document.querySelectorAll('.game-over').length > 0
-  }, done);
+  this.evaluate_now(() => document.querySelectorAll('.game-over').length > 0, done);
 });
 
 Nightmare.action('moveLeft', function nightmareMoveLeft(done) {

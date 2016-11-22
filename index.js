@@ -5,15 +5,19 @@
 const Nightmare = require('./Nightmare1024');
 const GameState = require('./GameState');
 const RandomStrategy = require('./RandomStrategy');
+const GeneticStrategy = require('./GeneticStrategy');
 
 class Driver {
   constructor() {
+    this.strategy = new GeneticStrategy();
+  }
+
+  prepForNewGame() {
     this.gameState = new GameState();
     this.nightmare = Nightmare({
       show: true,
       openDevTools: true,
     });
-    this.strategy = RandomStrategy;
   }
 
   visitPage() {
@@ -22,7 +26,7 @@ class Driver {
       .wait('.tile');
   }
 
-  runGeneration() {
+  runStrategy() {
     return this.visitPage()
       .then(() => this.recurseMove());
   }
@@ -56,10 +60,23 @@ class Driver {
   pickMove() {
     return this.moves[Math.floor(Math.random() * this.moves.length)];
   }
+
+  playARound() {
+    this.strategy.population.reduce(accumulator =>
+      accumulator.then(() => {
+        this.prepForNewGame();
+        return this.runStrategy()
+          .then(() => {
+            this.strategy.processTotalScore(this.gameState.totalScore);
+          });
+      })
+    , Promise.resolve([])).then(() => {
+      this.strategy.nextGeneration();
+      this.strategy.outputPopulationSummary();
+      this.playARound();
+    });
+  }
 }
 
 const driver = new Driver();
-driver.runGeneration()
-  .then(() => {
-    console.log(driver.gameState.totalScore);
-  });
+driver.playARound();
