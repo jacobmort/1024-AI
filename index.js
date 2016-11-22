@@ -4,7 +4,7 @@
 
 const Nightmare = require('./Nightmare1024');
 const GameState = require('./GameState');
-const RandomStrategy = require('./RandomStrategy');
+// const RandomStrategy = require('./RandomStrategy');
 const GeneticStrategy = require('./GeneticStrategy');
 
 class Driver {
@@ -55,10 +55,6 @@ class Driver {
       default:
         return this.nightmare.moveLeft();
     }
-  }
-
-  pickMove() {
-    return this.moves[Math.floor(Math.random() * this.moves.length)];
   }
 
   playARound() {
