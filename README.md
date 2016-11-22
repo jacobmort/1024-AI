@@ -1,4 +1,1 @@
-###### Setup
-If you get an error like Error: Cannot find module tiny-jsonrpc 
-```cd node_modules/spooky
-npm install```
+Exploring AI using the game of [1024](http://1024game.org/)
