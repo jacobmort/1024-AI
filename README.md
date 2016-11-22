@@ -15,7 +15,7 @@ If you get some nonsense about `ENOENT: no such file or directory /node_modules/
 Starts with 10 Genes, each with 400 randomly generated moves.  Have each play the game, take the top 3 scores and combine randomly to form the next generation.  Repeat over and over.  
 ![graph showing no learning](https://cloud.githubusercontent.com/assets/361696/20516167/a66a9052-b041-11e6-94d8-c8e29516f899.png)
 
-I think the problem with this is that the game contains randomness (starting position and position/value of new blocks) that this type of simple algorithm performs poorly against.
+Looks to me like it does no better than randomly choosing a move.  I think the problem with this is that the game contains randomness (starting position and position/value of new blocks) that this type of simple algorithm performs poorly against.
 
 ### Tensor Flow?
 Coming soon...
