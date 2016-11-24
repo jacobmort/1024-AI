@@ -1,23 +1,29 @@
+const AbstractStrategy = require('./AbstractStrategy');
 const RandomStrategy = require('./RandomStrategy');
 
-class GeneticStrategy {
+class GeneticStrategy extends AbstractStrategy {
   constructor() {
-    this.population = GeneticStrategy.getInitialPopulations(10);
+    super();
+    this.population = this.getInitialPopulations(10);
     this.populationScores = [];
     this.currentGeneIdx = 0;
     this.currentGeneMoves = 0;
     this.evoluationNum = 0;
   }
 
-  static getInitialPopulations(n) {
+  getInitialPopulations(n) {
     const population = [];
     for (let i = 0; i < n; i += 1) {
       population[i] = [];
       for (let j = 0; j < 500; j += 1) {
-        population[i].push(RandomStrategy.pickMove());
+        population[i].push(RandomStrategy.randomMove(this.getAvailableMoves()));
       }
     }
     return population;
+  }
+
+  isDone() {
+    return false;
   }
 
   pickMove() {

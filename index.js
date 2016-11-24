@@ -58,7 +58,7 @@ class Driver {
   }
 
   playARound() {
-    this.strategy.population.reduce(accumulator =>
+    this.strategy.getPopulation().reduce(accumulator =>
       accumulator.then(() => {
         this.prepForNewGame();
         return this.runStrategy()
@@ -69,7 +69,9 @@ class Driver {
     , Promise.resolve([])).then(() => {
       this.strategy.nextGeneration();
       this.strategy.outputPopulationSummary();
-      this.playARound();
+      if (!this.strategy.isDone()) {
+        this.playARound();
+      }
     });
   }
 }
