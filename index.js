@@ -67,9 +67,9 @@ class Driver {
           });
       })
     , Promise.resolve([])).then(() => {
-      this.strategy.nextGeneration();
       this.strategy.outputPopulationSummary();
       if (!this.strategy.isDone()) {
+        this.strategy.nextGeneration();
         this.playARound();
       }
     });

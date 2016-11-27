@@ -5,6 +5,7 @@
   },
   "rules": {
     import/no-extraneous-dependencies: [error, { devDependencies: true }],
-    no-console: ["error", { allow: ["log", "error"] }]
+    no-console: ["error", { allow: ["log", "error"] }],
+    comma-dangle: ["error", {"functions": "never"}]
   }
 }
