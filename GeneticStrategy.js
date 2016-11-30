@@ -51,45 +51,45 @@ class GeneticStrategy extends AbstractStrategy {
 
     // Respect your elders, carry over prev. winner incase new generation is garbage
     this.population[0] = bestGenes[0];
-    this.population[0].numMoves = 0;
+    this.population[0].playedMoves = 0;
 
     this.population[1] = GeneticStrategy.mate(
-      bestGenes[0].moves, bestGenes[0].numMoves,
-      bestGenes[0].moves, bestGenes[0].numMoves
+      bestGenes[0].moves, bestGenes[0].playedMoves,
+      bestGenes[0].moves, bestGenes[0].playedMoves
     );
     this.population[2] = GeneticStrategy.mate(
-      bestGenes[0].moves, bestGenes[0].numMoves,
-      bestGenes[1].moves, bestGenes[1].numMoves
+      bestGenes[0].moves, bestGenes[0].playedMoves,
+      bestGenes[1].moves, bestGenes[1].playedMoves
     );
     this.population[3] = GeneticStrategy.mate(
-      bestGenes[0].moves, bestGenes[0].numMoves,
-      bestGenes[2].moves, bestGenes[2].numMoves
+      bestGenes[0].moves, bestGenes[0].playedMoves,
+      bestGenes[2].moves, bestGenes[2].playedMoves
     );
 
     this.population[4] = GeneticStrategy.mate(
-      bestGenes[1].moves, bestGenes[1].numMoves,
-      bestGenes[0].moves, bestGenes[0].numMoves
+      bestGenes[1].moves, bestGenes[1].playedMoves,
+      bestGenes[0].moves, bestGenes[0].playedMoves
     );
     this.population[5] = GeneticStrategy.mate(
-      bestGenes[1].moves, bestGenes[1].numMoves,
-      bestGenes[1].moves, bestGenes[1].numMoves
+      bestGenes[1].moves, bestGenes[1].playedMoves,
+      bestGenes[1].moves, bestGenes[1].playedMoves
     );
     this.population[6] = GeneticStrategy.mate(
-      bestGenes[1].moves, bestGenes[1].numMoves,
-      bestGenes[2].moves, bestGenes[2].numMoves
+      bestGenes[1].moves, bestGenes[1].playedMoves,
+      bestGenes[2].moves, bestGenes[2].playedMoves
     );
 
     this.population[7] = GeneticStrategy.mate(
-      bestGenes[2].moves, bestGenes[2].numMoves,
-      bestGenes[0].moves, bestGenes[0].numMoves
+      bestGenes[2].moves, bestGenes[2].playedMoves,
+      bestGenes[0].moves, bestGenes[0].playedMoves
     );
     this.population[8] = GeneticStrategy.mate(
-      bestGenes[2].moves, bestGenes[2].numMoves,
-      bestGenes[1].moves, bestGenes[1].numMoves
+      bestGenes[2].moves, bestGenes[2].playedMoves,
+      bestGenes[1].moves, bestGenes[1].playedMoves
     );
     this.population[9] = GeneticStrategy.mate(
-      bestGenes[2].moves, bestGenes[2].numMoves,
-      bestGenes[2].moves, bestGenes[2].numMoves
+      bestGenes[2].moves, bestGenes[2].playedMoves,
+      bestGenes[2].moves, bestGenes[2].playedMoves
     );
   }
 

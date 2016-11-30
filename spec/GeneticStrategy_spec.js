@@ -49,7 +49,7 @@ describe('GeneticStrategy', () => {
       geneOne[0] = 3;
       geneTwo[0] = 4;
       expect(newGene.totalScore).toEqual(0);
-      expect(newGene.numMoves).toEqual(0);
+      expect(newGene.playedMoves).toEqual(0);
       expect(newGene.moves[0]).not.toEqual(3);
       expect(newGene.moves[0]).not.toEqual(4);
     });
