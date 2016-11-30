@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 class AbstractStrategy {
   constructor() {
     this.availableMoves = ['Up', 'Down', 'Right', 'Left'];

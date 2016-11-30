@@ -2,7 +2,7 @@ const EMPTY_BOARD = [
   [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
-  [0, 0, 0, 0],
+  [0, 0, 0, 0]
 ];
 
 class GameState {
@@ -59,7 +59,7 @@ class GameState {
     const matches = /tile-position-(\d*)-(\d*)/.exec(tile);
     return {
       x: parseInt(matches[1] - 1, 10),
-      y: parseInt(matches[2] - 1, 10),
+      y: parseInt(matches[2] - 1, 10)
     };
   }
 

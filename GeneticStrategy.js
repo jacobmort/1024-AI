@@ -49,7 +49,8 @@ class GeneticStrategy extends AbstractStrategy {
     this.evoluationNum += 1;
     const bestGenes = this.getBestGenes(3);
 
-    this.population[0] = bestGenes[0]; // Carry over our previous best incase new gen is poor
+    // Respect your elders, carry over prev. winner incase new generation is garbage
+    this.population[0] = bestGenes[0];
     this.population[0].numMoves = 0;
 
     this.population[1] = GeneticStrategy.mate(
@@ -92,13 +93,7 @@ class GeneticStrategy extends AbstractStrategy {
     );
   }
 
-  static mate(geneOne, geneOneEffectiveNumUsed, geneTwo, geneTwoEffectiveNumUsed) {
-    // No point including "junk" DNA that wasn't used during game
-    // rules:
-    //   Make sure cutOver includes some DNA that was used by geneTwo
-    //   Make sure insertIdx is within part of geneOne which was used
-    //   Make sure returned array is of same size
-    // const cutOver = Math.floor(Math.random() * (geneTwoEffectiveNumUsed - 1));
+  static mate(geneOne, geneOneEffectiveNumUsed, geneTwo) {
     const insertIdx = Math.floor(Math.random() * (geneOneEffectiveNumUsed - 1));
     const geneOnePiece = geneOne.slice(0, insertIdx);
     const geneTwoPiece = geneTwo.slice(0, geneOne.length - insertIdx);
@@ -110,6 +105,7 @@ class GeneticStrategy extends AbstractStrategy {
     this.population.forEach((val, i) => {
       indicies[i] = i;
     });
+
     indicies.sort((a, b) => {
       return this.population[a].totalScore > this.population[b].totalScore ? -1 : 1;
     });

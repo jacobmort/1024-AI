@@ -38,14 +38,14 @@ describe('GeneticStrategy', () => {
     it('returns correct length', () => {
       const geneOne = [1, 2];
       const geneTwo = [3, 4];
-      const newGene = GeneticStrategy.mate(geneOne, 2, geneTwo, 2);
+      const newGene = GeneticStrategy.mate(geneOne, 2, geneTwo);
       expect(newGene.moves.length).toEqual(2);
     });
 
     it('returns new gene', () => {
       const geneOne = [1];
       const geneTwo = [2];
-      const newGene = GeneticStrategy.mate(geneOne, 1, geneTwo, 1);
+      const newGene = GeneticStrategy.mate(geneOne, 1, geneTwo);
       geneOne[0] = 3;
       geneTwo[0] = 4;
       expect(newGene.totalScore).toEqual(0);
@@ -57,7 +57,7 @@ describe('GeneticStrategy', () => {
     it('does not modify original genes', () => {
       const geneOne = [1];
       const geneTwo = [2];
-      GeneticStrategy.mate(geneOne, 1, geneTwo, 1);
+      GeneticStrategy.mate(geneOne, 1, geneTwo);
       expect(geneOne[0]).toEqual(1);
       expect(geneTwo[0]).toEqual(2);
     });
@@ -68,7 +68,7 @@ describe('GeneticStrategy', () => {
           // 3 is not used
           const geneOne = [1, 2, 3];
           const geneTwo = [4, 5, 6];
-          const newGene = GeneticStrategy.mate(geneOne, 2, geneTwo, 3);
+          const newGene = GeneticStrategy.mate(geneOne, 2, geneTwo);
           expect(newGene.moves.indexOf(3)).toEqual(-1);
         });
       });
@@ -77,7 +77,7 @@ describe('GeneticStrategy', () => {
           // 5,6 not used
           const geneOne = [1, 2, 3];
           const geneTwo = [4, 5, 6];
-          const newGene = GeneticStrategy.mate(geneOne, 3, geneTwo, 1);
+          const newGene = GeneticStrategy.mate(geneOne, 3, geneTwo);
           expect(newGene.moves.indexOf(3)).toEqual(-1);
           expect(newGene.moves.indexOf(4)).not.toEqual(-1);
         });
