@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ubien/1024-AI.svg?branch=master)](https://travis-ci.org/ubien/1024-AI.svg?branch=master)
+
 # Automating 1024 Play
 
 Exploring AI using the game of [1024](http://1024game.org/).  Uses the excellent [nightmarejs](https://github.com/segmentio/nightmare) library to control the game.  Figuring out how to control timing of nightmare to not run all operations at once was challenging (see playARound() in [index.js](https://github.com/ubien/1024-AI/blob/master/index.js)).
